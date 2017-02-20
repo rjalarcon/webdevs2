@@ -6,37 +6,19 @@ var humidity;
 var wind;
 var direction;
 
-function pure_url($url) {
-   if ( substr($url, 0, 7) == 'http://' ) {
-      $url = substr($url, 7);
-   }
-   if ( substr($url, 0, 8) == 'https://' ) {
-      $url = substr($url, 8);
-   }
-   if ( substr($url, 0, 4) == 'www.') {
-      $url = substr($url, 4);
-   }
-   if ( strpos($url, '/') !== false ) {
-      $ex = explode('/', $url);
-      $url = $ex['0'];
-   } 
-   return $url;
-}
-
-echo pure_url('http://api.openweathermap.org/data/2.5/weather?');
-
 function updateByZip(zip) {
-    var url = "http://api.openweathermap.org/data/2.5/weather?" + 
+    var url = "http" + 
+    "://api.openweathermap.org/data/2.5/weather?" + 
     "zip=" + zip +
     "&APPID=" + APPID;
     sendRequest(url);
 }
 
 function sendRequest (url){
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-            var data = JSON.parse(xmlhttp.responseText);
+    var xmlhttps = new XMLHttpRequest();
+    xmlhttps.onreadystatechange = function() {
+        if (xmlhttps.readyState == 4 && xmlhttps.status == 200){
+            var data = JSON.parse(xmlhttps.responseText);
             var weather = {};
             weather.icon = data.weather[0].id;
             weather.humidity = data.main.humidity;
@@ -47,8 +29,8 @@ function sendRequest (url){
             update(weather);
         }
     };
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
+    xmlhttps.open("GET", url, true);
+    xmlhttps.send();
 }
 function update (weather){
     wind.innerHTML = weather.wind;
