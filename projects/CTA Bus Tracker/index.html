@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CTA Bus Tracker App</title>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=outline+font-effect-outline">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+    .demo-card-square.mdl-card {
+      width: 320px;
+      height: 320px;
+      margin: auto auto;
+      margin-top: 10px;
+    }
+    .demo-card-square > .mdl-card__title {
+      color: #fff;
+      background:
+    url('CTAlogo.png') center no-repeat #0078C1;
+}
+    
+    .mdl-layout__header-row{
+        background-color: #0078C1;
+    }
+
+    </style>
+
+
+</head>
+<body>
+</form>
+    <div class="demo-layout-waterfall mdl-layout mdl-js-layout">
+      <header class="mdl-layout__header mdl-layout__header--waterfall">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">CTA Bus Tracker App</span>
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                      mdl-textfield--floating-label mdl-textfield--align-right">
+            
+            <div class="mdl-textfield__expandable-holder">
+              <input class="mdl-textfield__input" type="text" name="sample"
+                     id="waterfall-exp">
+            </div>
+          </div>
+        </div>
+        
+      </header>
+      
+      <main class="mdl-layout__content">
+        <div class="page-content">
+            
+        </div>
+      </main>
+    </div>
+ 
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script>
+        $(function() {
+          
+          
+          var apiPassThruUrl = "https://polar-garden-75406.herokuapp.com/apiPassThru.php";
+          
+          var apiEndpoint = "http://www.ctabustracker.com/bustime/api/v2/getpredictions";
+          
+          
+          $.ajax({
+              url: apiPassThruUrl,
+              dataType: "json",
+              method: 'GET',
+              data: {"apiEndpoint": apiEndpoint,
+                      "key" : "8YAFVJm8EQA8BscwvD89UgGcZ",
+                      "rt" : "49",
+                      "stpid" : "8417,8195",
+                      "format":"json"}
+            }).done (function (data) {
+              console.log(data);
+              //$("body").append("<h1>Bus Routes</h1>");
+                
+                var html = ""; 
+            
+              $.each(data["bustime-response"]["prd"], function(i,v) {
+                  //$("body").append("Route #" + v.rt + ", " + v.rtdir + ", " + v.prdctdn + "<br>");
+                   
+                    html+= '<div class="demo-card-square mdl-card mdl-shadow--2dp"><div class="mdl-card__title mdl-card--expand"><h2 class="mdl-card__title-text">';
+                    html += v.rt + ": " + v.stpnm + " to " + v.des + " (" + v.rtdir + ")" + '</h2></div><div class="mdl-card__supporting-text">Bus arrival in: ';
+                    if(v.prdctdn == "DUE"){
+                        html += "DUE";
+                    } else{
+                        html += v.prdctdn + " minutes";
+                    }
+                    html+= '</div></div>'
+                  
+              })
+                $('.page-content').html(html);
+            });
+        });
+            
+  
+</script>
+ 
+</body>
+</html>
