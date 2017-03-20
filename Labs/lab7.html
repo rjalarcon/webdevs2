@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pothole service requests</title>
+        <style>
+            p, h2 {font-family: helvetica;}
+            p {font-size:1.5em;line-height:1.5em; margin-left: 24px;}
+            pre {font-size: 2em;}
+            #potholes { font-size: 1.5em; border: 1px solid black; margin: 4px; border-radius: 5px; background-color: #ededed}
+            .template { display: none;}
+        </style>
+    </head>
+    <body>
+
+    <h1>Open pot hole service requests</h1>
+    
+    <div class="template potholes">
+        <h1 class="serviceType"></h1>
+        <p>
+            Service Request Number: <span class="number"></span><br>
+            Status: <span class="status"></span>
+        </p>
+    </div>
+    
+    <div id="results">
+        
+    </div>
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        /*
+            This script retrieves 311 pot hole service request data for 
+            from the 
+            City of Chicago Data Portal
+            
+            This script doesn't update the DOM.
+
+        */
+
+        // base URL to the food inspections data
+        var baseURL = 'https://data.cityofchicago.org/resource/787j-mys9.json';
+        
+        // optional filters we're appending - status
+        var filters = '?zip=60647';
+        
+        // full URL
+        var url = baseURL + filters;
+        
+        console.log (url);
+        
+        $(
+            // jQuery command to retrieve json data
+            
+            $.getJSON(url)
+                .done (function (data) {
+                    // TODO:  add script to add data to the DOM
+                    console.log(data);
+                    //var date = data[0].creation_date;
+                    var clone;
+
+                    // loop through the records
+                    
+                    $.each(data, function(index, value){
+                        
+                        clone = $(".template").clone();
+                        clone.removeClass("template");
+                        clone.find(".serviceType").text(value.type_of_service_request);
+                        clone.find(".number").text(value.service_request_number);
+                        clone.find(".status").text(value.status);
+                        
+                        $("#results").append(clone);
+                        
+                       /*var html = "<div><h1>" + value.type_of_service_request + "</h1>" +
+                                    "<p>" +
+                                    "Service request number: " + value.service_request_number +
+                                    "<br>Status: " + value.status +
+                                    "</p>" +
+                                    "</div>";
+                                    
+                        $("body").append(html);*/
+                    });
+                })
+            
+            
+        )
+        
+        
+    </script>
+    </body>
+</html>
